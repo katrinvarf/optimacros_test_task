@@ -10,7 +10,7 @@ token = ''
 urlPrefix = '/test_task'
 
 
-@app.route(urlPrefix + '/main', method=['GET', 'POST'])
+@app.route(urlPrefix + '/', method=['GET', 'POST'])
 def main_page():
     if request.method == 'POST':
         # получаем значения широты и долготы
@@ -28,7 +28,7 @@ def main_page():
 @app.route(urlPrefix + '/address', method=['GET', 'POST'])
 def get_address():
     if request.method == 'POST':
-        redirect(urlPrefix + '/main')
+        redirect(urlPrefix + '/')
     else:
         # берем значения координат из куки
         latitude = request.get_cookie('latitude', secret='something_special')
