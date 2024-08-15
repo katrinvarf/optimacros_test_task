@@ -14,7 +14,8 @@ def get_address(token, latitude, longitude):
             full_address = result[0]['unrestricted_value']
             address_components = full_address.split(', ')
 
-    except httpx.ConnectError as e:  # обработка проблемы с соединением с API DaData
+    # обработка проблемы с соединением с API DaData + неверный токен
+    except (httpx.ConnectError, httpx.HTTPStatusError) as e:
         print(e)
         address_components = None
 
