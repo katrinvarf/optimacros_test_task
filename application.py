@@ -7,9 +7,10 @@ import getter
 
 app = bottle.Bottle()
 token = ''
+urlPrefix = '/test_task'
 
 
-@app.route('/main', method=['GET', 'POST'])
+@app.route(urlPrefix + '/main', method=['GET', 'POST'])
 def main_page():
     if request.method == 'POST':
         # получаем значения широты и долготы
@@ -20,14 +21,14 @@ def main_page():
         response.set_cookie('latitude', latitude, secret='something_special')
         response.set_cookie('longitude', longitude, secret='something_special')
 
-        redirect('/address')
+        redirect(urlPrefix + '/address')
     return template('templates/main.html')
 
 
-@app.route('/address', method=['GET', 'POST'])
+@app.route(urlPrefix + '/address', method=['GET', 'POST'])
 def get_address():
     if request.method == 'POST':
-        redirect('/main')
+        redirect(urlPrefix + '/main')
     else:
         # берем значения координат из куки
         latitude = request.get_cookie('latitude', secret='something_special')
