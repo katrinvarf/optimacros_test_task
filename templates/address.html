@@ -16,22 +16,31 @@
         <h5 class="card-title text-center d-grid">
             <label>Адрес с координатами {{coordinates}}</label>
         </h5>
-        %if len(address_components) == 0:
+        %if address_components == None:
             <div class="mb-3 text-center">
-                <label>Не найден <i class="fa fa-frown-o" aria-hidden="true"></i></label>
+                <label>Проблема с соединением c API <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></label>
                 <div class="form-text">
-                    <label>Возможно вы ввели координаты за пределами России.</label>
-                    <label>Попробуйте снова!</label>
+                    <label>Повторите попытку позже!</label>
                 </div>
             </div>
         %else:
-            <div class="card border-primary mb-3 text-center">
-                <ul class="list-group list-group-flush">
-                    %for component in address_components:
-                        <li class="list-group-item">{{component}}</li>
-                    %end
-                </ul>
-            </div>
+            %if len(address_components) == 0:
+                <div class="mb-3 text-center">
+                    <label>Не найден <i class="fa fa-frown-o" aria-hidden="true"></i></label>
+                    <div class="form-text">
+                        <label>Возможно вы ввели координаты за пределами России.</label>
+                        <label>Попробуйте снова!</label>
+                    </div>
+                </div>
+            %else:
+                <div class="card border-primary mb-3 text-center">
+                    <ul class="list-group list-group-flush">
+                        %for component in address_components:
+                            <li class="list-group-item">{{component}}</li>
+                        %end
+                    </ul>
+                </div>
+            %end
         %end
         <div class="col text-center d-grid">
             <button class="btn btn-primary">Найти другое место</button>
