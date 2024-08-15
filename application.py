@@ -1,8 +1,9 @@
 #!/usr/bin/python3.7
 # -*- coding: UTF-8 -*-
 import bottle
-from bottle import template, request, redirect
+from bottle import template, request, redirect, response
 import argparse
+import getter
 
 app = bottle.Bottle()
 token = ''
@@ -11,6 +12,14 @@ token = ''
 @app.route('/main', method=['GET', 'POST'])
 def main_page():
     if request.method == 'POST':
+        # получаем значения широты и долготы
+        latitude = float(request.POST.get('latitude'))
+        longitude = float(request.POST.get('longitude'))
+
+        # записываем координаты в куки
+        response.set_cookie('latitude', latitude, secret='something_special')
+        response.set_cookie('longitude', longitude, secret='something_special')
+
         redirect('/address')
     return template('templates/main.html')
 
@@ -19,7 +28,16 @@ def main_page():
 def get_address():
     if request.method == 'POST':
         redirect('/main')
-    return template('templates/address.html')
+    else:
+        # берем значения координат из куки
+        latitude = request.get_cookie('latitude', secret='something_special')
+        longitude = request.get_cookie('longitude', secret='something_special')
+        coordinates = f'({latitude}, {longitude})'
+
+        # запрашиваем адрес по координатам
+        address_components = getter.get_address(token, latitude, longitude)
+
+    return template('templates/address.html', address_components=address_components, coordinates=coordinates)
 
 
 if __name__ == '__main__':
